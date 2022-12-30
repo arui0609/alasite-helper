@@ -1,0 +1,28 @@
+{
+    "name": "arui/ala-site",
+    "description": "the package work for ala site system , to build website fastily!",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Arui\\AlaSite\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "arui",
+            "email": "1598369123@qq.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Arui\\AlaSite\\AlaSiteProvider"
+            ],
+            "aliases": {
+                "AlaSite": "Arui\\AlaSite\\Facades\\AlaSite"
+            }
+        }
+    },
+    "require": {}
+}
