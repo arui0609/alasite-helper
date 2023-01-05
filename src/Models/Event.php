@@ -62,8 +62,10 @@ class Event extends Model
 
     public static function getPaginate ($pagesize,$where=[]){
         $where[] = ['site_label','=',config('alasite.site_label')];
+        $where[] = ['published','=',1];
         $data = self::where($where)
             ->select(['id', 'description', 'name', 'image', 'created_time', 'start_time', 'end_time', 'location', 'redirect'])
+            ->orderBy('pinned','desc')
             ->orderBy('sort')
             ->orderBy('start_time', 'desc');
         if($pagesize > 0){

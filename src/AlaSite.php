@@ -140,7 +140,7 @@ class AlaSite
         return $info;
     }
 
-    public function peoples ($cate_id,$pagesize){
+    public function peoples ($cate_id,$pagesize=0,$where_relate=[]){
         $people_ids = Relationship::getItemID('App\Models\People','App\Models\Category',$cate_id);
         if($people_ids){
             $people_ids = implode(',',$people_ids);
@@ -150,7 +150,7 @@ class AlaSite
         }else{
             $where = ['id'=>0];
         }
-        return People::getPaginate($pagesize,$where);
+        return People::getPaginate($pagesize,array_merge($where_relate,$where));
     }
 
     public function people ($id){
