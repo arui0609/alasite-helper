@@ -26,4 +26,18 @@ class Relationship extends Model
         }
         return self::where($where)->pluck('item_id')->toArray();
     }
+
+    public static function getTargetID ($relationship_type,$target_type,$item_id){
+        $where = [
+            ['relationship_type','=',$relationship_type],
+            ['target_type' ,'=', $target_type],
+        ];
+        if(is_array($item_id)){
+            $item_id = implode(',',$item_id);
+            $where[] = [DB::raw("item_id in ({$item_id})"), 1];
+        }else{
+            $where['item_id'] = $item_id;
+        }
+        return self::where($where)->pluck('target_id')->toArray();
+    }
 }

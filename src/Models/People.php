@@ -15,6 +15,12 @@ class People extends Model
 
     public $table = 'peoples';
 
+    //人员所属分类
+    public function category()
+    {
+        return $this->morphToMany(Category::class, 'relationship', 'relationships', 'item_id', 'target_id');
+    }
+
     public function department()
     {
         return $this->belongsTo(Category::class, 'department', 'id');

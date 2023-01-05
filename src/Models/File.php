@@ -37,10 +37,17 @@ class File extends BaseModel
         return $this->attributes['path'] ? config('alasite.asset_url') . $this->attributes['path'] : null;
     }
 
-    public static function getList ($where){
-        return self::where($where)
+    public static function getList ($where,$pagesize=0){
+        $data = self::where($where)
             ->where('published', 1)
-            ->orderBy('sort')->get(['id', 'path', 'name', 'thumbnail', 'description', 'content', 'redirect'])
-            ->toArray();
+            ->orderBy('sort')
+            ->orderBy('created_at','desc')
+            ->select(['id', 'path', 'name', 'thumbnail', 'description', 'content', 'redirect']);
+        if($pagesize){
+            $data = $data->paginate($pagesize);
+        }else{
+            $data = $data->get()->toArray();
+        }
+        return $data;
     }
 }

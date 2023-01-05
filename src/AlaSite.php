@@ -28,11 +28,15 @@ class AlaSite
     }
 
     public function banners (){
-        $banner_ids = Relationship::getItemID("App\Models\File","App\Models\Folder",config('alasite.banner_folder_id'));
+        return self::files(config('alasite.banner_folder_id'));
+    }
+
+    public function files ($folder_id,$pagesize=0){
+        $banner_ids = Relationship::getItemID("App\Models\File","App\Models\Folder",$folder_id);
         $banner_ids = implode(',',$banner_ids);
-        return $banner_ids ? File::getList([
-            [DB::raw("id in ({$banner_ids})"), 1]
-        ]) : [];
+        return File::getList([
+            $banner_ids ? [DB::raw("id in ({$banner_ids})"), 1] : ['id','=',0]
+        ],$pagesize);
     }
 
     public function nav ($cate_id){
@@ -45,6 +49,39 @@ class AlaSite
         return Navigation::tree($navWhere);
     }
 
+    public function navSort ($cate_id,$id){
+        $navigation_ids = Relationship::getItemID('App\Models\Navigation','App\Models\Category',$cate_id);
+        $navigation_ids = implode(',',$navigation_ids);
+        $navWhere = [
+            ['site_label', config('alasite.site_label')],
+            [DB::raw("id in ({$navigation_ids})"), 1]
+        ];
+        $data = Navigation::where($navWhere)->where('parent_id', 0)->orderBy('sort','asc')->where('published',1)->get()->toArray();
+        foreach ($data as $key => $brother){
+            if($brother['id'] === $id){
+                return $key;
+            }
+        }
+        return null;
+    }
+
+    public function current_nav ($path = ''){
+        $path = $path ?: request()->getPathInfo();
+        return Navigation::where('url',$path)->where('site_label','en')->first();
+    }
+
+    public function current_banner ($default = '',$path = ''){
+        $current_nav = self::current_nav($path);
+
+        if($current_nav['image']){
+            return $current_nav['image'];
+        }else if($current_nav->parent && $current_nav->parent['image']){
+            return $current_nav->parent['image'];
+        }else {
+            return $default;
+        }
+    }
+
     public function nav_child ($nav_id){
         $nav = Navigation::find($nav_id);
         return $nav->childs;
@@ -53,10 +90,17 @@ class AlaSite
     public function news ($cate_id,$pagesize){
         $post_ids = Relationship::getItemID('App\Models\Post','App\Models\Category',$cate_id);
         $post_ids = implode(',',$post_ids);
-        $where = [
-            [DB::raw("id in ({$post_ids})"), 1],
-            ['published','=',1]
-        ];
+        if($post_ids){
+            $where = [
+                [DB::raw("id in ({$post_ids})"), 1],
+                ['published','=',1]
+            ];
+        }else{
+            $where = [
+                ['id','=',0]
+            ];
+        }
+
         if(request('k')){
             $where[] = ['name','like',"%".request('k')."%"];
         }
@@ -107,6 +151,10 @@ class AlaSite
             $where = ['id'=>0];
         }
         return People::getPaginate($pagesize,$where);
+    }
+
+    public function people ($id){
+        return People::findOrfail($id);
     }
 
     public function page ($id){
