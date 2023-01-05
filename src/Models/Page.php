@@ -25,7 +25,10 @@ class Page extends Model
     //子分类
     public function childs()
     {
-        return $this->hasMany(Page::class, 'parent_id', 'id')->select(['id', 'name', 'sort', 'sub_name', 'created_at', 'parent_id', 'site_label', 'description', 'image', 'banner', 'redirect', 'content']);
+        return $this->hasMany(Page::class, 'parent_id', 'id')
+            ->select(['id', 'name', 'sort', 'sub_name', 'created_at', 'parent_id', 'site_label', 'description', 'image', 'banner', 'redirect', 'content'])
+            ->where('published',1)
+            ->orderBy('sort','asc');
     }
 
 
