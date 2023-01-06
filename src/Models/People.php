@@ -49,7 +49,7 @@ class People extends Model
         $where[] = ['site_label','=',config('alasite.site_label')];
         $where[] = ['published','=',1];
         $data = self::where($where)
-            ->select(['id', 'name', 'title', 'image', 'research', 'email', 'tel', 'description', 'content', 'created_at'])
+            ->select(['id', 'name', 'title', 'image', 'research', 'email', 'tel', 'description', 'content', 'created_at','department'])
             ->orderBy('pinned', 'desc')
             ->orderBy('deleted_at', 'desc')
             ->orderBy('sort');
