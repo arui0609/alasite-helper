@@ -3,7 +3,7 @@
         'name' => 'arui/ala-site',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '89ab06ae67ff71d587a7f1907ca34f5f0e3417cb',
+        'reference' => '25783cf84ebc8d01f4ad823698ef98ba4fba40d4',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'arui/ala-site' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '89ab06ae67ff71d587a7f1907ca34f5f0e3417cb',
+            'reference' => '25783cf84ebc8d01f4ad823698ef98ba4fba40d4',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

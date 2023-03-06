@@ -19,11 +19,11 @@ class Navigation extends Model
     }
 
     public function childs (){
-        return $this->hasMany(Navigation::class,"parent_id","id");
+        return $this->hasMany(Navigation::class,"parent_id","id")->orderBy('sort');
     }
 
     public function parent (){
-        return $this->belongsTo(Navigation::class,"parent_id","id");
+        return $this->belongsTo(Navigation::class,"parent_id","id")->orderBy('sort');
     }
 
     public function getImageAttribute()
